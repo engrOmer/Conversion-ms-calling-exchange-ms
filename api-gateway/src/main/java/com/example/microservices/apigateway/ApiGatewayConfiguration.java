@@ -15,17 +15,19 @@ public class ApiGatewayConfiguration {
 
     @Bean
     public RouteLocator gatewayRouter(RouteLocatorBuilder builder) {
-        Function<PredicateSpec, Buildable<Route>> routeFunction = a -> a.path("/get")
-                .filters(f->f.addRequestHeader("MyHeader","MyURI")
-                .addRequestHeader("Param","MyValue"))
-                .uri("http://httpbin.org:88");
-        Function<PredicateSpec, Buildable<Route>> routeFunction2 = a -> a.path("/CURRENCY-EXCHANGE**")
-                .filters(f->f.addRequestHeader("MyHeader","MyURI")
-                        .addRequestHeader("Param","MyValue"))
-                .uri("lb:CURRENCY-EXCHANGE");
+//        Function<PredicateSpec, Buildable<Route>> routeFunction = a -> a.path("/get")
+//                .filters(f->f.addRequestHeader("MyHeader","MyURI")
+//                .addRequestHeader("Param","MyValue"))
+//                .uri("http://httpbin.org:88");
+//
+
+        Function<PredicateSpec, Buildable<Route>> routeFunction2 = a -> a.path("/currency-exchange/**")
+                .uri("lb://currency-exchange");
 
 
-        return builder.routes().route(routeFunction).build();
+        return builder.routes().route(a -> a.path("/currency-exchange/**")
+                .uri("lb://currency-exchange"))
+                .build();
 
     }
 }
